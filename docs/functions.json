@@ -1,0 +1,6 @@
+{"allowCustomDataForDataTypeAny":true,"functions":[{"id":"DOCSO","name":"DOCSO",
+"description":"Đọc số thành chữ tiếng Việt. Tùy chọn: le, ngan, ti, HOA, thuong (cách nhau bằng dấu phẩy).",
+"parameters":[{"name":"so","description":"Số hoặc ô chứa số","type":"any","dimensionality":"scalar"},
+{"name":"hauto","description":"Chữ thêm cuối, ví dụ \" đồng\"","type":"string","dimensionality":"scalar","optional":true},
+{"name":"tuychon","description":"Ví dụ: le,ngan,ti,HOA","type":"string","dimensionality":"scalar","optional":true}],
+"result":{"type":"string","dimensionality":"scalar"}}]}

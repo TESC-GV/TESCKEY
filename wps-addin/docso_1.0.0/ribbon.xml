@@ -1,0 +1,13 @@
+<customUI xmlns="http://schemas.microsoft.com/office/2006/01/customui" onLoad="OnAddinLoad">
+  <ribbon startFromScratch="false">
+    <tabs>
+      <tab id="docsoTab" label="Số thành chữ">
+        <group id="docsoGroup" label="Đọc số tiếng Việt">
+          <button id="btnRight" label="Chữ sang cột bên phải" size="large" onAction="OnAction" getImage="GetImage"/>
+          <button id="btnRightDong" label="Chữ + đồng, cột bên phải" size="large" onAction="OnAction" getImage="GetImage"/>
+          <button id="btnInPlace" label="Thay ngay tại ô" size="large" onAction="OnAction" getImage="GetImage"/>
+        </group>
+      </tab>
+    </tabs>
+  </ribbon>
+</customUI>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0" xmlns:ov="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="TaskPaneApp">
+  <Id>d5034c15-8647-4176-8139-ff8ff59650bc</Id>
+  <Version>1.0.0.0</Version>
+  <ProviderName>Bao Khue</ProviderName>
+  <DefaultLocale>vi-VN</DefaultLocale>
+  <DisplayName DefaultValue="Số thành chữ"/>
+  <Description DefaultValue="Đọc số thành chữ tiếng Việt cho Word."/>
+  <IconUrl DefaultValue="https://tesc-gv.github.io/TESCKEY/icon-32.png"/>
+  <HighResolutionIconUrl DefaultValue="https://tesc-gv.github.io/TESCKEY/icon-80.png"/>
+  <AppDomains><AppDomain>https://tesc-gv.github.io</AppDomain></AppDomains>
+  <Hosts><Host Name="Document"/></Hosts>
+  <DefaultSettings><SourceLocation DefaultValue="https://tesc-gv.github.io/TESCKEY/taskpane.html"/></DefaultSettings>
+  <Permissions>ReadWriteDocument</Permissions>
+  <VersionOverrides xmlns="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="VersionOverridesV1_0">
+    <Hosts>
+      <Host xsi:type="Document">
+        <DesktopFormFactor>
+          <GetStarted>
+            <Title resid="Title"/>
+            <Description resid="Desc"/>
+            <LearnMoreUrl resid="Taskpane.Url"/>
+          </GetStarted>
+          <FunctionFile resid="Taskpane.Url"/>
+          <ExtensionPoint xsi:type="PrimaryCommandSurface">
+            <OfficeTab id="TabHome">
+              <Group id="VietGroup">
+                <Label resid="Title"/>
+                <Icon><bt:Image size="16" resid="Icon16"/><bt:Image size="32" resid="Icon32"/><bt:Image size="80" resid="Icon80"/></Icon>
+                <Control xsi:type="Button" id="VietBtn">
+                  <Label resid="Title"/>
+                  <Supertip><Title resid="Title"/><Description resid="Desc"/></Supertip>
+                  <Icon><bt:Image size="16" resid="Icon16"/><bt:Image size="32" resid="Icon32"/><bt:Image size="80" resid="Icon80"/></Icon>
+                  <Action xsi:type="ShowTaskpane"><TaskpaneId>VietPane</TaskpaneId><SourceLocation resid="Taskpane.Url"/></Action>
+                </Control>
+              </Group>
+            </OfficeTab>
+          </ExtensionPoint>
+        </DesktopFormFactor>
+      </Host>
+    </Hosts>
+    <Resources>
+      <bt:Images>
+        <bt:Image id="Icon16" DefaultValue="https://tesc-gv.github.io/TESCKEY/icon-16.png"/>
+        <bt:Image id="Icon32" DefaultValue="https://tesc-gv.github.io/TESCKEY/icon-32.png"/>
+        <bt:Image id="Icon80" DefaultValue="https://tesc-gv.github.io/TESCKEY/icon-80.png"/>
+      </bt:Images>
+      <bt:Urls>
+        <bt:Url id="Taskpane.Url" DefaultValue="https://tesc-gv.github.io/TESCKEY/taskpane.html"/>
+      </bt:Urls>
+      <bt:ShortStrings>
+        <bt:String id="Title" DefaultValue="Số thành chữ"/>
+      </bt:ShortStrings>
+      <bt:LongStrings>
+        <bt:String id="Desc" DefaultValue="Đổi số đang chọn thành chữ tiếng Việt."/>
+      </bt:LongStrings>
+    </Resources>
+  </VersionOverrides>
+</OfficeApp>

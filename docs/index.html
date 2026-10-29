@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Công cụ tiếng Việt</title>
+<style>
+:root{--bg:#e8ede9;--pn:#f6f9f7;--ink:#1b2622;--mu:#58696338;--mt:#586963;--ac:#0e6a5a;--bt:#fff;--ln:#c2cdc7;--f:system-ui,'Segoe UI',sans-serif;--fs:17px}
+@media(prefers-color-scheme:dark){:root{--bg:#131a18;--pn:#1b2422;--ink:#e2eae6;--mt:#98a8a2;--ac:#4fc3a8;--bt:#0a1411;--ln:#2f3f3a}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,'Segoe UI',sans-serif}
+.w{max-width:920px;margin:0 auto;padding:22px 16px 48px}
+h1{font-size:23px;margin:0 0 2px;letter-spacing:-.01em}
+.sub,.hint{color:var(--mt);margin:0 0 14px;font-size:14px}
+nav{display:flex;flex-wrap:wrap;border-bottom:2px solid var(--ln);margin-bottom:16px}
+nav button{background:none;border:0;border-bottom:3px solid transparent;margin-bottom:-2px;padding:9px 14px;color:var(--mt);font:inherit;cursor:pointer}
+nav button[aria-selected=true]{color:var(--ink);border-color:var(--ac);font-weight:600}
+section{display:none}section.on{display:block}
+textarea,input,select{font:inherit;color:inherit;background:var(--pn);border:1px solid var(--ln);border-radius:4px;padding:8px}
+textarea{width:100%;resize:vertical;font-family:var(--f);font-size:var(--fs);line-height:1.55}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0}
+.row label{display:flex;gap:6px;align-items:center}
+button.b,button.g{font:inherit;border-radius:4px;padding:7px 14px;cursor:pointer}
+button.b{background:var(--ac);color:var(--bt);border:0}
+button.g{background:none;color:var(--ink);border:1px solid var(--ln)}
+:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+table{width:100%;border-collapse:collapse;margin-top:8px}
+td,th{padding:6px 8px;border-bottom:1px solid var(--ln);text-align:left}
+.st{color:var(--ac);font-weight:600;min-height:1.5em}
+#dz{border:2px dashed var(--ln);border-radius:6px;padding:18px;text-align:center;color:var(--mt)}
+#dz.ov{border-color:var(--ac)}
+.sm{font-family:var(--f);font-size:calc(var(--fs) + 5px);padding:12px;background:var(--pn);border:1px solid var(--ln);border-radius:4px}
+</style></head><body><div class="w">
+<h1>Công cụ tiếng Việt</h1>
+<p class="sub">Một file, chạy offline, không gửi dữ liệu đi đâu.</p>
+<nav role="tablist" id="tabs">
+<button role="tab" data-t="p1" aria-selected="true">Gõ chữ</button>
+<button role="tab" data-t="p2" aria-selected="false">Đổi chữ</button>
+<button role="tab" data-t="p3" aria-selected="false">Gõ tắt</button>
+<button role="tab" data-t="p4" aria-selected="false">Số thành chữ</button>
+<button role="tab" data-t="p5" aria-selected="false">Font</button>
+</nav>
+
+<section id="p1" class="on">
+<div class="row">
+<label>Kiểu gõ <select id="mode"><option value="telex">Telex</option><option value="vni">VNI</option><option value="off">Tắt</option></select></label>
+<label><input type="checkbox" id="nw"> Đặt dấu kiểu mới (hoà, thuỷ)</label>
+<label><input type="checkbox" id="ab" checked> Bung gõ tắt</label>
+</div>
+<textarea id="ed" rows="13" placeholder="Gõ ở đây. Telex: Vieejt Nam, dduwowcj. VNI: Vie65t Nam, d9u7o75c." spellcheck="false"></textarea>
+<div class="row">
+<button class="b" data-copy="ed">Sao chép</button>
+<button class="g" id="dl">Tải .txt</button>
+<button class="g" id="clr">Xóa</button>
+<span class="hint" style="margin:0">Ctrl+Space bật/tắt. Sau khi gõ tắt bung ra, nhấn Backspace để hoàn tác.</span>
+</div>
+</section>
+
+<section id="p2">
+<div class="row"><label>Chuyển sang <select id="cv">
+<option value="nfc">Unicode dựng sẵn</option><option value="nfd">Unicode tổ hợp</option>
+<option value="nod">Bỏ dấu</option><option value="up">VIẾT HOA</option><option value="low">viết thường</option><option value="title">Viết Hoa Từng Chữ</option></select></label>
+<span class="st" id="det"></span></div>
+<textarea id="ci" rows="7" placeholder="Dán văn bản cần đổi" spellcheck="false"></textarea>
+<div class="row"><button class="b" data-copy="co">Sao chép kết quả</button></div>
+<textarea id="co" rows="7" readonly></textarea>
+<p class="hint">Bảng mã cũ (TCVN3, VNI Windows, VPS…) chưa có trong bản này. Công cụ chỉ báo khi nghi ngờ văn bản thuộc bảng mã cũ.</p>
+</section>
+
+<section id="p3">
+<div class="row"><input id="ak" placeholder="Viết tắt" size="10"><input id="av" placeholder="Bung thành" size="32">
+<button class="b" id="aadd">Thêm</button></div>
+<div class="row"><button class="g" id="aex">Xuất JSON</button>
+<button class="g" id="aim">Nhập JSON/CSV</button><input type="file" id="af" accept=".json,.csv,.txt" hidden>
+<button class="g" id="ars">Về bộ mẫu</button></div>
+<p class="hint">Gõ tắt hoạt động trong ô ở tab Gõ chữ khi nhấn Space hoặc Enter. Giữ hoa thường: Ko thành Không, KO thành KHÔNG.</p>
+<table><thead><tr><th>Viết tắt</th><th>Bung thành</th><th></th></tr></thead><tbody id="at"></tbody></table>
+</section>
+
+<section id="p4">
+<div class="row">
+<label>Đầu vào <select id="nm"><option value="l">Mỗi dòng một số</option><option value="t">Số trong văn bản</option></select></label>
+<label>Kiểu số <select id="ns"><option value="vn">1.234,5</option><option value="en">1,234.5</option></select></label>
+<label>Số lẻ <select id="o1"><option value="linh">linh</option><option value="lẻ">lẻ</option></select></label>
+<label>1000 <select id="o2"><option value="nghìn">nghìn</option><option value="ngàn">ngàn</option></select></label>
+<label>10⁹ <select id="o3"><option value="tỷ">tỷ</option><option value="tỉ">tỉ</option></select></label>
+<label>Viết hoa <select id="o4"><option value="f">chữ đầu</option><option value="u">toàn bộ</option><option value="n">không</option></select></label>
+<label>Hậu tố <input id="o5" value=" đồng" size="14"></label>
+</div>
+<textarea id="ni" rows="6" placeholder="Mỗi dòng một số, ví dụ:&#10;1250000&#10;21.005.001,5" spellcheck="false"></textarea>
+<div class="row"><button class="b" data-copy="no">Sao chép kết quả</button><span class="hint" style="margin:0">Dán cả cột từ Excel vào, kết quả ra đúng từng dòng. Hậu tố chỉ áp dụng ở chế độ từng dòng.</span></div>
+<textarea id="no" rows="6" readonly></textarea>
+</section>
+
+<section id="p5">
+<div class="row"><button class="b" id="lf">Lấy font trong máy</button><span class="st" id="fst"></span></div>
+<div class="row"><label>Font <input id="fn" list="fl" size="26" placeholder="Chọn hoặc gõ tên font"></label>
+<label>Cỡ <input type="range" id="fz" min="12" max="40" value="17"></label></div>
+<datalist id="fl"></datalist>
+<div id="dz">Kéo thả file .ttf, .otf, .woff, .woff2 vào đây, hoặc bấm để chọn<input type="file" id="ff" accept=".ttf,.otf,.woff,.woff2" multiple hidden></div>
+<p class="sm" id="smp">Người Việt Nam yêu quý đất nước. Thử dấu: ặ ẳ ẵ ờ ở ỡ ữ ỵ ế ề ể ễ ệ.</p>
+<p class="hint">Font chọn ở đây áp dụng cho các ô soạn thảo. Chỉ liệt kê font hiển thị được tiếng Việt. Cần Chrome hoặc Edge để đọc font trong máy.</p>
+</section>
+</div>
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const store={get(k,d){try{const v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const dl=(name,txt,type)=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([txt],{type}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),999)};
+const copy=async id=>{const el=$('#'+id);try{await navigator.clipboard.writeText(el.value)}catch(e){el.select();document.execCommand('copy')}};
+$$('[data-copy]').forEach(b=>b.onclick=()=>{copy(b.dataset.copy);const t=b.textContent;b.textContent='Đã sao chép';setTimeout(()=>b.textContent=t,1200)});
+$$('#tabs button').forEach(b=>b.onclick=()=>{$$('#tabs button').forEach(x=>x.setAttribute('aria-selected',x===b));$$('section').forEach(s=>s.classList.toggle('on',s.id===b.dataset.t))});
+
+/* ===== Bộ gõ ===== */
+const TONE={s:'\u0301',f:'\u0300',r:'\u0309',x:'\u0303',j:'\u0323'},VT={1:'s',2:'f',3:'r',4:'x',5:'j'};
+const isV=c=>'aeiouyăâêôơư'.includes(c);
+function split(w){const d=w.normalize('NFD');let t=null;const b=d.replace(/[\u0300\u0301\u0309\u0303\u0323]/g,m=>(t=m,'')).normalize('NFC');return[b,t]}
+function compose(b,t,nw){
+  if(!t)return b;const L=[...b.toLowerCase()];let s=0;
+  if(L[0]=='q'&&L[1]=='u'&&L.length>2)s=2;else if(L[0]=='g'&&L[1]=='i'&&L.length>2&&isV(L[2]))s=2;
+  let i=s;while(i<L.length&&!isV(L[i]))i++;let j=i;while(j<L.length&&isV(L[j]))j++;
+  const g=j-i;if(!g)return b;let p;const mod=[];
+  for(let k=i;k<j;k++)if('ăâêôơư'.includes(L[k]))mod.push(k);
+  if(mod.length)p=mod[mod.length-1];else if(g==1)p=i;else if(j<L.length)p=i+1;
+  else if(g==2){const pr=L[i]+L[i+1];p=['oa','oe','uy'].includes(pr)?(nw?i+1:i):i}else p=i+1;
+  const a=[...b];a[p]=(a[p]+t).normalize('NFC');return a.join('')}
+const CIRC={a:'â',e:'ê',o:'ô'},INV={â:'a',ê:'e',ô:'o',ă:'a',ơ:'o',ư:'u'};
+function ime(w,k,mode,nw){
+  let[b,t]=split(w);const lk=k.toLowerCase();
+  const lastV=()=>{for(let i=b.length-1;i>=0;i--)if(isV(b[i].toLowerCase()))return i;return-1};
+  const lastOf=s=>{for(let i=b.length-1;i>=0;i--)if(s.includes(b[i].toLowerCase()))return i;return-1};
+  const rep=(i,c)=>{const u=b[i]!==b[i].toLowerCase();b=b.slice(0,i)+(u?c.toUpperCase():c)+b.slice(i+1)};
+  let tk=null,op=null;
+  if(mode=='telex'){if(TONE[lk])tk=lk;else if(lk=='z')tk='z';else if('aeo'.includes(lk))op='c';else if(lk=='w')op='w';else if(lk=='d')op='d'}
+  else{if('012345'.includes(k))tk=k=='0'?'z':VT[k];else op={6:'c',7:'h',8:'b',9:'d'}[k]||null}
+  if(tk){
+    if(lastV()<0)return null;
+    if(tk=='z')return t?compose(b,null):null;
+    if(t===TONE[tk])return compose(b,null)+k;
+    return compose(b,TONE[tk],nw)}
+  if(!op)return null;
+  if(op=='d'){const c=b[0]&&b[0].toLowerCase();
+    if(c=='d'){rep(0,'đ');return compose(b,t,nw)}
+    if(c=='đ'){rep(0,'d');return compose(b,t,nw)+k}return null}
+  if(op=='c'){const fam=mode=='telex'?[lk,CIRC[lk]]:['a','e','o','â','ê','ô'];
+    for(let i=b.length-1;i>=0;i--){const c=b[i].toLowerCase();
+      if(fam.includes(c)&&/^[aeiouyăâêôơư]*(c|ch|m|n|ng|nh|p|t)?$/.test(b.slice(i+1).toLowerCase())){
+        if(CIRC[c]){rep(i,CIRC[c]);return compose(b,t,nw)}
+        rep(i,INV[c]);return compose(b,t,nw)+k}}
+    return null}
+  const set=mode=='telex'?'aouăơư':op=='h'?'ouơư':'aă';
+  const i=lastOf(set);if(i<0)return null;const c=b[i].toLowerCase();
+  if('aou'.includes(c)){
+    if(c=='a')rep(i,'ă');
+    else{rep(i,c=='o'?'ơ':'ư');if(c=='o'&&i>0&&b[i-1].toLowerCase()=='u')rep(i-1,'ư')}
+    return compose(b,t,nw)}
+  rep(i,INV[c]);if(c=='ơ'&&i>0&&b[i-1].toLowerCase()=='ư')rep(i-1,'u');
+  return compose(b,t,nw)+k}
+
+/* ===== Gõ tắt ===== */
+const DEF={ko:'không',dc:'được',đc:'được',vn:'Việt Nam',tphcm:'TP. Hồ Chí Minh',ngta:'người ta',bt:'bình thường',trc:'trước',sg:'Sài Gòn',hn:'Hà Nội'};
+let abm=store.get('abbr',null)||{...DEF};
+function abRender(){
+  const tb=$('#at');tb.innerHTML='';
+  Object.keys(abm).sort().forEach(k=>{const tr=tb.insertRow();tr.insertCell().textContent=k;tr.insertCell().textContent=abm[k];
+    const b=document.createElement('button');b.className='g';b.textContent='Xóa';b.onclick=()=>{delete abm[k];store.set('abbr',abm);abRender()};tr.insertCell().appendChild(b)})}
+$('#aadd').onclick=()=>{const k=$('#ak').value.trim().toLowerCase(),v=$('#av').value;if(!k||!v)return;abm[k]=v;store.set('abbr',abm);$('#ak').value=$('#av').value='';abRender()};
+$('#aex').onclick=()=>dl('go-tat.json',JSON.stringify(abm,null,1),'application/json');
+$('#aim').onclick=()=>$('#af').click();
+$('#af').onchange=async e=>{const f=e.target.files[0];if(!f)return;const t=await f.text();let o={};
+  try{o=JSON.parse(t)}catch(x){t.split(/\r?\n/).forEach(l=>{const m=l.split(/[,\t]/);if(m.length>=2&&m[0].trim())o[m[0].trim().toLowerCase()]=m.slice(1).join(',').trim()})}
+  Object.assign(abm,o);store.set('abbr',abm);abRender();e.target.value=''};
+$('#ars').onclick=()=>{abm={...DEF};store.set('abbr',abm);abRender()};
+abRender();
+
+/* ===== Ô soạn thảo ===== */
+const ed=$('#ed');let last=null;
+$('#mode').value=store.get('mode','telex');$('#mode').onchange=e=>store.set('mode',e.target.value);
+$('#nw').checked=store.get('nw',false);$('#nw').onchange=e=>store.set('nw',e.target.checked);
+ed.addEventListener('keydown',e=>{
+  if(e.isComposing)return;
+  if(e.ctrlKey&&e.code=='Space'){e.preventDefault();const m=$('#mode');m.value=m.value=='off'?(store.get('mt','telex')):(store.set('mt',m.value),'off');m.onchange({target:m});return}
+  if(e.ctrlKey||e.metaKey||e.altKey)return;
+  const k=e.key,pos=ed.selectionStart;
+  if(k=='Backspace'&&last&&pos==ed.selectionEnd&&pos==last.s+last.x.length&&ed.value.slice(last.s,pos)==last.x){
+    e.preventDefault();ed.setRangeText(last.o,last.s,pos,'end');last=null;return}
+  if(k.length==1||k=='Enter')last=null;
+  if(pos!=ed.selectionEnd)return;
+  const before=ed.value.slice(0,pos),mode=$('#mode').value;
+  if(mode!='off'&&k.length==1&&(mode=='telex'?/[a-z]/i:/[0-9]/).test(k)){
+    const m=before.match(/\p{L}+$/u);
+    if(m){const r=ime(m[0],k,mode,$('#nw').checked);if(r!==null){e.preventDefault();ed.setRangeText(r,pos-m[0].length,pos,'end');return}}}
+  if($('#ab').checked&&(k==' '||k=='Enter')){
+    const m=before.match(/[\p{L}\p{N}]+$/u);const w=m&&m[0],x=w&&abm[w.toLowerCase()];
+    if(x){let r=x;if(w.length>1&&w==w.toUpperCase())r=x.toUpperCase();else if(w[0]!=w[0].toLowerCase())r=x[0].toUpperCase()+x.slice(1);
+      const sep=k==' '?' ':'\n',s=pos-w.length;e.preventDefault();ed.setRangeText(r+sep,s,pos,'end');last={s,o:w,x:r+sep}}}
+});
+$('#dl').onclick=()=>dl('van-ban.txt',ed.value,'text/plain');
+$('#clr').onclick=()=>{ed.value='';ed.focus()};
+
+/* ===== Đổi chữ ===== */
+const CV={nfc:t=>t.normalize('NFC'),nfd:t=>t.normalize('NFD'),
+  nod:t=>t.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').replace(/Đ/g,'D'),
+  up:t=>t.toUpperCase(),low:t=>t.toLowerCase(),
+  title:t=>t.toLowerCase().replace(/(^|[\s\-(])(\p{L})/gu,(m,a,b)=>a+b.toUpperCase())};
+function detect(t){
+  if(!t.trim())return'';
+  if(/[\u0300\u0301\u0303\u0309\u0323]/.test(t))return'Phát hiện: Unicode tổ hợp';
+  if(/[ăâêôơưđ]|[ấầẩẫậếềểễệốồổỗộớờởỡợứừửữự]|[ảạẳẵặẻẽẹỉĩịỏọủụỷỹỵ]/i.test(t))return'Phát hiện: Unicode dựng sẵn';
+  const L=(t.match(/\p{L}/gu)||[]).length,h=(t.match(/[\u00a1-\u00ff]/g)||[]).length;
+  return L&&h/L>.1?'Nghi là bảng mã cũ (TCVN3, VNI…), bản này chưa chuyển được':'Không thấy dấu tiếng Việt'}
+const cvRun=()=>{$('#co').value=CV[$('#cv').value]($('#ci').value);$('#det').textContent=detect($('#ci').value)};
+$('#ci').oninput=$('#cv').onchange=cvRun;
+
+/* ===== Số thành chữ ===== */
+const U=['không','một','hai','ba','bốn','năm','sáu','bảy','tám','chín'];
+function r3(n,full,o){const h=n/100|0,t=n%100/10|0,u=n%10,p=[];
+  if(h||full)p.push(U[h]+' trăm');
+  if(t>1){p.push(U[t]+' mươi');p.push(u==1?'mốt':u==5?'lăm':u?U[u]:'')}
+  else if(t==1){p.push('mười');p.push(u==5?'lăm':u?U[u]:'')}
+  else if(u){if(h||full)p.push(o.linh);p.push(U[u])}
+  return p.filter(Boolean).join(' ')}
+const gn=(i,o)=>i==0?'':i==1?o.ng:i==2?'triệu':i==3?o.ty:gn(i-3,o)+' '+o.ty;
+function int2w(s,o){
+  s=s.replace(/^0+(?=\d)/,'');if(/^0+$/.test(s))return U[0];
+  const g=[];for(let e=s.length;e>0;e-=3)g.push(+s.slice(Math.max(0,e-3),e));
+  const out=[];let st=false;
+  for(let i=g.length-1;i>=0;i--){if(!g[i])continue;out.push((r3(g[i],st,o)+' '+gn(i,o)).trim());st=true}
+  return out.join(' ')}
+function parseNum(str,vn){
+  let s=str.trim().replace(/\s/g,'');const neg=/^[-−–]/.test(s);s=s.replace(/^[-+−–]/,'');
+  const th=vn?'.':',',de=vn?',':'.',p=s.split(de);if(p.length>2)return null;
+  const i=p[0].split(th).join(''),f=p[1]||'';
+  if(!/^\d+$/.test(i)||(f&&!/^\d+$/.test(f)))return null;return{neg,i,f}}
+function words(str,o,vn,suffix){
+  const n=parseNum(str,vn);if(!n)return null;
+  let r=(n.neg?'âm ':'')+int2w(n.i,o)+(n.f?' phẩy '+[...n.f].map(d=>U[d]).join(' '):'')+(suffix||'');
+  return o.cap=='u'?r.toUpperCase():o.cap=='f'?r[0].toUpperCase()+r.slice(1):r}
+function numRun(){
+  const o={linh:$('#o1').value,ng:$('#o2').value,ty:$('#o3').value,cap:$('#o4').value},vn=$('#ns').value=='vn',v=$('#ni').value;
+  $('#no').value=$('#nm').value=='l'
+    ?v.split(/\r?\n/).map(l=>l.trim()?(words(l,o,vn,$('#o5').value)??'(không đọc được số này)'):'').join('\n')
+    :v.replace(/\d[\d.,]*\d|\d/g,m=>{const r=words(m,{...o,cap:'n'},vn);return r??m})}
+$$('#p4 select,#p4 input,#ni').forEach(e=>e.oninput=e.onchange=numRun);
+
+/* ===== Font ===== */
+const root=document.documentElement.style,cx=document.createElement('canvas').getContext('2d');
+const viOK=n=>{const s='ặẳẵờởỡữỵếềểễệ';cx.font=`40px "${n}",serif`;const a=cx.measureText(s).width;cx.font=`40px "${n}",monospace`;return a===cx.measureText(s).width};
+const setFont=n=>root.setProperty('--f',n?`"${n}",system-ui,sans-serif`:'system-ui,sans-serif');
+const addOpt=n=>{const o=document.createElement('option');o.value=n;$('#fl').appendChild(o)};
+$('#fn').onchange=e=>{setFont(e.target.value);store.set('font',e.target.value)};
+$('#fz').oninput=e=>root.setProperty('--fs',e.target.value+'px');
+$('#lf').onclick=async()=>{
+  if(!window.queryLocalFonts){$('#fst').textContent='Trình duyệt không hỗ trợ. Dùng Chrome/Edge hoặc kéo thả file font.';return}
+  try{const all=await queryLocalFonts(),fam=[...new Set(all.map(f=>f.family))].sort();
+    $('#fl').innerHTML='';let n=0;fam.forEach(f=>{if(viOK(f)){addOpt(f);n++}});
+    $('#fst').textContent=`${n} font hỗ trợ tiếng Việt (trong ${fam.length} font của máy)`}
+  catch(e){$('#fst').textContent='Chưa được cấp quyền đọc font.'}};
+async function loadFonts(files){
+  for(const f of files){if(!/\.(ttf|otf|woff2?)$/i.test(f.name))continue;
+    const n=f.name.replace(/\.\w+$/,'');
+    try{const ff=new FontFace(n,await f.arrayBuffer());await ff.load();document.fonts.add(ff);addOpt(n);setFont(n);$('#fn').value=n;$('#fst').textContent='Đã thêm font '+n}
+    catch(e){$('#fst').textContent='Không đọc được '+f.name}}}
+const dz=$('#dz');dz.onclick=()=>$('#ff').click();$('#ff').onchange=e=>loadFonts(e.target.files);
+dz.ondragover=e=>{e.preventDefault();dz.classList.add('ov')};dz.ondragleave=()=>dz.classList.remove('ov');
+dz.ondrop=e=>{e.preventDefault();dz.classList.remove('ov');loadFonts(e.dataTransfer.files)};
+{const f=store.get('font','');if(f){$('#fn').value=f;setFont(f)}}
+</script></body></html>
