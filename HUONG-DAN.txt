@@ -1,0 +1,13 @@
+BO GO VIET - HUONG DAN NHANH
+
+1. Bo go: cua so nho hien chu V (xanh) la dang go tieng Viet, E (do) la dang tat.
+   Ctrl+Shift de bat/tat. Chon Telex hoac VNI trong cua so.
+   Go tat: bam "Sua go tat", moi dong dang  ko=khong
+2. Cong cu tieng Viet (doi chu, so thanh chu, font): mo bieu tuong "Cong cu tieng Viet".
+3. Word/Excel: mo Word hoac Excel, vao Insert > My Add-ins > Developer Add-ins,
+   chon "So thanh chu". Can Internet khi mo lan dau.
+4. Neu Windows hien "Windows protected your PC": bam "More info" > "Run anyway".
+   (Phan mem chua co chu ky so tra phi nen Windows canh bao.)
+5. Phan mem khong go duoc trong chuong trinh chay quyen Administrator:
+   bam chuot phai BoGoViet > Run as administrator.
+6. Go cai dat: Settings > Apps > Bo go Viet > Uninstall.

@@ -1,0 +1,29 @@
+name: Build installer
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+permissions:
+  contents: write
+env:
+  PYTHONUTF8: '1'
+  PYTHONIOENCODING: utf-8
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install pyinstaller pystray pillow
+      - run: python bogo-viet/test_engine.py
+      - run: pyinstaller --onefile --noconsole --name BoGoViet --hidden-import pystray._win32 --paths bogo-viet bogo-viet/bogo.py
+      - run: choco install innosetup -y --no-progress
+      - run: '& "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer.iss'
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest
+          name: Ban moi nhat
+          files: |
+            out/CaiDat-BoGoViet.exe
+            dist/BoGoViet.exe

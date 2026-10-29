@@ -1,0 +1,44 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Số thành chữ</title>
+<script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+<script src="docso.js"></script>
+<style>
+body{font:14px/1.5 'Segoe UI',system-ui,sans-serif;margin:0;padding:12px;color:#1b2622;background:#f6f9f7}
+label{display:block;margin:6px 0 2px;color:#586963}
+select,input,textarea{width:100%;font:inherit;padding:6px;border:1px solid #c2cdc7;border-radius:4px;box-sizing:border-box}
+button{width:100%;margin-top:10px;padding:9px;font:inherit;border:0;border-radius:4px;background:#0e6a5a;color:#fff;cursor:pointer}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid #0e6a5a;outline-offset:2px}
+#msg{margin-top:10px;min-height:1.5em;color:#0e6a5a;font-weight:600}
+</style></head><body>
+<label for="vn">Kiểu số trong ô văn bản</label>
+<select id="vn"><option value="1">1.234,5 (Việt Nam)</option><option value="0">1,234.5 (quốc tế)</option></select>
+<label for="o1">Số lẻ</label><select id="o1"><option value="linh">linh</option><option value="lẻ">lẻ</option></select>
+<label for="o2">1000</label><select id="o2"><option value="nghìn">nghìn</option><option value="ngàn">ngàn</option></select>
+<label for="o3">10⁹</label><select id="o3"><option value="tỷ">tỷ</option><option value="tỉ">tỉ</option></select>
+<label for="o4">Viết hoa</label><select id="o4"><option value="f">chữ đầu</option><option value="u">toàn bộ</option><option value="n">không</option></select>
+<label for="o5">Hậu tố</label><input id="o5" value=" đồng">
+<button id="go">Đổi vùng chọn</button>
+<div id="msg" role="status"></div>
+<script>
+var host='';
+function opt(){return{vn:document.getElementById('vn').value=='1',linh:o1.value,ng:o2.value,ty:o3.value,cap:o4.value,suffix:o5.value}}
+function msg(t){document.getElementById('msg').textContent=t}
+function numStr(v){return typeof v==='number'?String(v):String(v)}
+function one(v,o){
+  if(v===''||v==null)return'';
+  var r=typeof v==='number'?DocSo.docso(String(v),Object.assign({},o,{vn:false})):DocSo.docso(String(v),o);
+  return r==null?DocSo.convertText(String(v),o):r}
+Office.onReady(function(i){host=i.host;
+  document.getElementById('go').textContent=host==='Excel'?'Đổi vùng chọn sang cột bên phải':'Thay đoạn bôi đen bằng chữ';
+  document.getElementById('go').onclick=async function(){
+    try{
+      if(host==='Excel'){await Excel.run(async function(c){
+        var r=c.workbook.getSelectedRange();r.load('values,columnCount');await c.sync();
+        var o=opt();r.getOffsetRange(0,r.columnCount).values=r.values.map(function(row){return row.map(function(v){return one(v,o)})});
+        await c.sync();msg('Đã đổi. Kết quả ở cột bên phải vùng chọn.')})}
+      else{await Word.run(async function(c){
+        var s=c.document.getSelection();s.load('text');await c.sync();var o=opt();
+        var t=s.text.trim(),r=DocSo.docso(t,o);
+        s.insertText(r==null?DocSo.convertText(s.text,o):r,'Replace');await c.sync();msg('Đã thay.')})}
+    }catch(e){msg('Lỗi: '+e.message)}}});
+</script></body></html>

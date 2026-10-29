@@ -1,0 +1,24 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tải Bộ gõ Việt</title>
+<style>
+:root{--bg:#e8ede9;--ink:#1b2622;--ac:#0e6a5a}
+@media(prefers-color-scheme:dark){:root{--bg:#131a18;--ink:#e2eae6;--ac:#4fc3a8}}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,'Segoe UI',sans-serif}
+main{max-width:560px;margin:8vh auto;padding:0 20px}
+a.b{display:block;text-align:center;background:var(--ac);color:#fff;padding:16px;border-radius:6px;text-decoration:none;font-size:18px;margin:20px 0}
+@media(prefers-color-scheme:dark){a.b{color:#0a1411}}
+a.b:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+li{margin:6px 0}
+</style></head><body><main>
+<h1>Bộ gõ Việt</h1>
+<p>Bộ gõ tiếng Việt toàn máy (Telex, VNI, gõ tắt) cùng công cụ đổi số thành chữ cho Word và Excel.</p>
+<a class="b" id="dl" href="#">Tải về cho Windows</a>
+<ol>
+<li>Tải file về, bấm đúp để cài. Không cần quyền admin, không cần cài thêm gì.</li>
+<li>Nếu Windows báo "protected your PC": bấm <b>More info</b>, rồi <b>Run anyway</b>.</li>
+<li>Cửa sổ nhỏ hiện chữ <b>V</b> xanh là đang gõ tiếng Việt. Ctrl+Shift để bật/tắt.</li>
+</ol>
+<script>
+var u=location.hostname.split('.')[0],r=location.pathname.split('/')[1]||'';
+document.getElementById('dl').href='https://github.com/'+u+'/'+r+'/releases/latest/download/CaiDat-BoGoViet.exe';
+</script></main></body></html>
